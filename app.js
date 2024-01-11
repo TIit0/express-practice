@@ -1,41 +1,25 @@
-const http = require("http");
-const { readFileSync } = require("fs");
-
-// get all files
-
-const homepage = readFileSync("./navbar-app/index.html");
-const styles = readFileSync("./navbar-app/styles.css");
-const js = readFileSync("./navbar-app/browser-app.js");
-const logo = readFileSync("./navbar-app/logo.svg");
+const express = require("express");
+const app = express();
 
 
-const server = http.createServer((req, res) => {
+app.get("/", (req, res) => {
+    res.status(200)
+        .send("Home page");
+});
 
-    console.log(req.url)
-    if (req.url === "/") {
-        res.writeHead(200, { "content-type": "text/html" }); /* mime type */
-        res.write(homepage)
-    } else if (req.url === "/about") {
-        res.writeHead(200, { "content-type": "text/html" }); /* mime type */
-        res.write("<h1>about</h1>")
-    }
-    else if (req.url === "/styles.css") {
-        res.writeHead(200, { "content-type": "text/css" }); /* mime type */
-        res.write(styles)
-    }
-    else if (req.url === "/browser-app.js") {
-        res.writeHead(200, { "content-type": "text/javascript" }); /* mime type */
-        res.write(js)
-    }
-    else if (req.url === "/logo.svg") {
-        res.writeHead(200, { "content-type": "image/svg+xml" }); /* mime type */
-        res.write(logo)
-    } else {
-        res.writeHead(404, { "content-type": "text/html" }); /* mime type */
-        res.write("<h1>404</h1>")
-    }
+app.get("/about", (req, res) => {
+    res.status(200)
+        .send("about")
+});
 
-    res.end();
+/* cover all http methods, useful for 404 */
+
+app.all("*", (req, res) => {
+
+    res.status(404)
+        .send("<h1>404 Resource not Found</h1>")
 })
 
-server.listen(5000);
+app.listen(5000, () => {
+    console.log("server listening on port 5000")
+})
