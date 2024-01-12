@@ -1,25 +1,25 @@
 const express = require("express");
+const path = require("path")
 const app = express();
 
 
-app.get("/", (req, res) => {
-    res.status(200)
-        .send("Home page");
-});
+// setup static and middleware
+app.use(express.static("./public"))
+// provides files inside the folder this has an index html, so it automatically loads on get request
 
-app.get("/about", (req, res) => {
-    res.status(200)
-        .send("about")
-});
 
-/* cover all http methods, useful for 404 */
+
+
+
+// app.get("/", (req, res) => {
+//     res.status(200).sendFile(path.join(__dirname, "./navbar-app/index.html"))
+//     adding to static assets
+//     serverside renderiing    
+// });
 
 app.all("*", (req, res) => {
-
-    res.status(404)
-        .send("<h1>404 Resource not Found</h1>")
+    res.status(404).send("error")
 })
 
-app.listen(5000, () => {
-    console.log("server listening on port 5000")
-})
+
+app.listen(5000, () => console.log("Listening on port 5000"))
