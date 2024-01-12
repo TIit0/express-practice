@@ -1,25 +1,29 @@
 const express = require("express");
-const path = require("path")
 const app = express();
+const { products, people } = require("./data")
 
 
-// setup static and middleware
-app.use(express.static("./public"))
-// provides files inside the folder this has an index html, so it automatically loads on get request
+app.get("/", (req, res) => {
+    res.status(201).send("<div><h1>homepage</h1><a href='/api/products'>api</a></div>")
+});
 
+app.get("/api/products", (req, res) => {
+    const newProductArr = products.map(product => {
+        const { image, price, id, name } = product;
+        return { image, price, id, name }
+    });
 
+    res.status(201).json(newProductArr)
+});
 
+app.get("/api/products/:productID", (req, res) => {
+    console.log(req.params)
+    const resProduct = products.find(product => product.id == Number(req.params.productID));
+    const { image, price, name } = resProduct;
 
+    res.status(201).json({image, price, name});
+});
 
-// app.get("/", (req, res) => {
-//     res.status(200).sendFile(path.join(__dirname, "./navbar-app/index.html"))
-//     adding to static assets
-//     serverside renderiing    
-// });
-
-app.all("*", (req, res) => {
-    res.status(404).send("error")
+app.listen(5000, () => {
+    console.log("Listening on port 5000...")
 })
-
-
-app.listen(5000, () => console.log("Listening on port 5000"))
