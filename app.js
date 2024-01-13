@@ -16,6 +16,8 @@ app.get("/api/products", (req, res) => {
     res.status(201).json(newProductArr)
 });
 
+
+
 app.get("/api/products/:productID", (req, res) => {
     console.log(req.params)
     const resProduct = products.find(product => product.id == Number(req.params.productID));
@@ -27,6 +29,13 @@ app.get("/api/products/:productID", (req, res) => {
         res.status(404).send("resource not found")
     }
 });
+
+app.get("/api/products/:tables/reviews/:item", (req, res) => {
+    console.log(req.params)
+    res.status(200).send(`${req.params.item} and ${req.params.tables}`)
+});
+
+
 
 app.listen(5000, () => {
     console.log("Listening on port 5000...")
