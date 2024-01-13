@@ -19,9 +19,13 @@ app.get("/api/products", (req, res) => {
 app.get("/api/products/:productID", (req, res) => {
     console.log(req.params)
     const resProduct = products.find(product => product.id == Number(req.params.productID));
-    const { image, price, name } = resProduct;
 
-    res.status(201).json({image, price, name});
+    if (resProduct) {
+        const { image, price, name } = resProduct;
+        res.status(201).json({ image, price, name });
+    } else {
+        res.status(404).send("resource not found")
+    }
 });
 
 app.listen(5000, () => {
