@@ -4,7 +4,7 @@ const { products, people } = require("./data")
 
 
 app.get("/", (req, res) => {
-    res.status(201).send("<div><h1>homepage</h1><a href='/api/products'>api</a></div>")
+    return res.status(201).send("<div><h1>homepage</h1><a href='/api/products'>api</a></div>")
 });
 
 app.get("/api/products", (req, res) => {
@@ -13,7 +13,7 @@ app.get("/api/products", (req, res) => {
         return { image, price, id, name }
     });
 
-    res.status(201).json(newProductArr)
+    return res.status(201).json(newProductArr)
 });
 
 
@@ -24,15 +24,15 @@ app.get("/api/products/:productID", (req, res) => {
 
     if (resProduct) {
         const { image, price, name } = resProduct;
-        res.status(201).json({ image, price, name });
+        return res.status(201).json({ image, price, name });
     } else {
-        res.status(404).send("resource not found")
+        return res.status(404).send("resource not found")
     }
 });
 
 app.get("/api/products/:tables/reviews/:item", (req, res) => {
     console.log(req.params)
-    res.status(200).send(`${req.params.item} and ${req.params.tables}`)
+    return res.status(200).send(`${req.params.item} and ${req.params.tables}`)
 });
 
 
