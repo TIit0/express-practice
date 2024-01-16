@@ -1,39 +1,31 @@
 const express = require("express");
 const app = express();
-const { products, people } = require("./data")
+const logger = require("./logger")
 
+app.use("/about", logger)
 
-app.get("/", (req, res) => {
-    return res.status(201).send("<div><h1>homepage</h1><a href='/api/products'>api</a></div>")
-});
+app.get("/" ,(req, res) => {
 
-app.get("/api/products", (req, res) => {
-    const newProductArr = products.map(product => {
-        const { image, price, id, name } = product;
-        return { image, price, id, name }
-    });
+    return res.status(200).send("<h1>Home</h1>")
+})
 
-    return res.status(201).json(newProductArr)
-});
+app.get("/about", (req, res) => {
+    return res.status(200).send("<h1>About</h1>")
+})
 
+app.get("/about/team", (req, res) => {
+    return res.status(200).send("<h1>About</h1>")
+})
 
+app.get("/product" ,(req, res) => {
 
-app.get("/api/products/:productID", (req, res) => {
-    console.log(req.params)
-    const resProduct = products.find(product => product.id == Number(req.params.productID));
+    return res.status(200).send("<h1>products</h1>")
+})
 
-    if (resProduct) {
-        const { image, price, name } = resProduct;
-        return res.status(201).json({ image, price, name });
-    } else {
-        return res.status(404).send("resource not found")
-    }
-});
+app.get("/items", (req, res) => {
+    return res.status(200).send("<h1>items</h1>")
+})
 
-app.get("/api/products/:tables/reviews/:item", (req, res) => {
-    console.log(req.params)
-    return res.status(200).send(`${req.params.item} and ${req.params.tables}`)
-});
 
 
 
