@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
-const logger = require("./logger")
+const logger = require("./logger");
+const authorize = require("./authorize")
 
-app.use("/about", logger)
+app.use("/about/team", [logger, authorize])
 
 app.get("/" ,(req, res) => {
 
@@ -14,6 +15,7 @@ app.get("/about", (req, res) => {
 })
 
 app.get("/about/team", (req, res) => {
+    console.log(req.user)
     return res.status(200).send("<h1>About</h1>")
 })
 
