@@ -1,9 +1,11 @@
 const express = require("express");
 const app = express();
 const logger = require("./logger");
-const authorize = require("./authorize")
+const authorize = require("./authorize");
 
-app.use("/about/team", [logger, authorize])
+// app.use("/about/team", [logger, authorize])
+
+app.use(express.static("./public"))
 
 app.get("/" ,(req, res) => {
 
@@ -24,7 +26,7 @@ app.get("/product" ,(req, res) => {
     return res.status(200).send("<h1>products</h1>")
 })
 
-app.get("/items", (req, res) => {
+app.get("/items", [logger, authorize] ,(req, res) => {
     return res.status(200).send("<h1>items</h1>")
 })
 
