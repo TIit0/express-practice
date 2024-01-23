@@ -1,14 +1,14 @@
 // middleware function 
 
-function authorize( req, res, next) {
+function authorize(req, res, next) {
 
-    const {user} = req.query;
+    const { user } = req.query;
 
     if (user === "sience") {
-        req.user = {name: "sicence the rat", id: "2"};
+        req.user = { name: "sicence the rat", id: "2" };
         next();
     } else {
-       return res.status(401).send("<h1>Unathorized</h1>")
+        return res.status(401).send("<h1>Unathorized</h1>")
     }
 
     console.log("authorize")

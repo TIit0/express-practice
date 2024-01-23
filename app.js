@@ -1,38 +1,68 @@
 const express = require("express");
 const app = express();
-const logger = require("./logger");
-const authorize = require("./authorize");
+let { people } = require("./data")
 
-// app.use("/about/team", [logger, authorize])
+app.use(express.static("./methods-public"));
 
-app.use(express.static("./public"))
+//parse urlencoded
+app.use(express.urlencoded({ extended: false }));
+// parse json
+app.use(express.json());
 
-app.get("/" ,(req, res) => {
 
-    return res.status(200).send("<h1>Home</h1>")
+app.get("/api/people", (req, res) => {
+    return res.status(201).json({ success: true, data: people })
+});
+
+app.post("/api/people", (req, res) => {
+    const { name } = req.body;
+    if (!name) {
+        return res.status(400).json({ success: false, msg: "please insert a name" })
+    } else {
+        return res.status(201).json({ success: true, person: name })
+    }
+});
+
+/* 
+---  My attempt at blind put method ---
+
+app.put("/api/people/:id", (req, res) => {
+    const { id } = req.params;
+    console.log(req.body)
+    if (!id || !req.body) {
+        return res.status(401).json({
+            success: false,
+            msg: "bad request"
+        })
+    }
+
+    const newPeople = people.map(
+        person => person.id == id ? person = { id: Number(id), ...req.body } : person = person
+    );
+    return res.status(201).json({
+        success: true,
+        data: newPeople
+    });
+});
+
+*/
+
+app.put("api/people/:id", (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+    const person = people.find(person => person.id === Number(id));
+
+    if (!person) return res.status(400).json({ success: false, msg: `no person with id:${id}` });
+
+    const newPeople = people.map(person => {
+        if (person.id === Number(id)) {
+            person.name = name;
+        }
+    });
+
+    res.status(200).json({success: true, data: newPeople})
 })
-
-app.get("/about", (req, res) => {
-    return res.status(200).send("<h1>About</h1>")
-})
-
-app.get("/about/team", (req, res) => {
-    console.log(req.user)
-    return res.status(200).send("<h1>About</h1>")
-})
-
-app.get("/product" ,(req, res) => {
-
-    return res.status(200).send("<h1>products</h1>")
-})
-
-app.get("/items", [logger, authorize] ,(req, res) => {
-    return res.status(200).send("<h1>items</h1>")
-})
-
-
-
 
 app.listen(5000, () => {
     console.log("Listening on port 5000...")
-})
+});
