@@ -23,8 +23,11 @@ const putPeople = (req, res) => {
 
     const newPeople = people.map(person => {
         if (person.id === Number(id)) {
-            person.name = name;
+            person = { ...req.body, id: person.id }
+            return person;
         }
+
+        return person
     });
 
     res.status(200).json({ success: true, data: newPeople })
@@ -44,4 +47,4 @@ const deletePeople = (req, res) => {
     return res.status(201).json({ success: true, deleted: person, data: newPeople });
 }
 
-module.exports = {getPeople, postPeople, putPeople, deletePeople}
+module.exports = { getPeople, postPeople, putPeople, deletePeople }
