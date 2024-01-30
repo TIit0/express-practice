@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const peopleRouter = require("./routes/people")
+const logInRouter = require("./routes/auth")
 
 app.use(express.static("./methods-public"));
 
@@ -9,18 +10,11 @@ app.use(express.urlencoded({ extended: false }));
 // parse json
 app.use(express.json());
 
-app.use("/api/people", peopleRouter)
+app.use("/api/people", peopleRouter);
+app.use("/login", logInRouter);
 
 
-app.post("/login/", (req, res) => {
-    const { name } = req.body;
 
-    if (name) {
-        return res.status(200).send(`Welcome ${name}`)
-    } else {
-        return res.status(401).send("unathorized")
-    }
-})
 
 
 
